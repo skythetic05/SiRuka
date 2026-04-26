@@ -24,7 +24,7 @@ export const useLogin = () => {
     const login = async (data: LoginDto) => {
         setErrors({});
 
-        // ✅ VALIDASI
+        // validasi
         const result = schema.safeParse(data);
         if (!result.success) {
             const fieldErrors: typeof errors = {};
@@ -47,25 +47,23 @@ export const useLogin = () => {
             const token = res?.token;
             const user = res?.user;
 
-            // ALIDASI
+            // Validasi
             if (!token || !user) {
                 toast.error("Token / user tidak ditemukan");
                 return;
             }
-
-            // SIMPAN
+            // simpan Token
             authService.setToken(token);
             authService.setUser(user);
 
             toast.success("Login berhasil");
 
-            // ROLE REDIRECT
+            // Redirect ke dashbard seuai role
             if (user.role === "admin") {
                 router.push("/dashboard/admin");
             } else if (user.role === "dosen" || user.role === "mahasiswa") {
                 router.push("/dashboard/user");
             } else {
-                // fallback kalau role aneh
                 router.push("/");
             }
 
